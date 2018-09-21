@@ -207,6 +207,13 @@
                     });
                 });
 
+                eventHandler.detectCaptchaError = function() {
+                    controls.imgname.click();
+                }
+                eventHandler.detectCaptchaSuccess = function() {}
+
+                document.getElementById('imgname').onload = detectCaptcha;
+
                 controls.imgname.attr("src", "http://elective.pku.edu.cn/elective2008/DrawServlet?Rand=" + Math.random())
                     .click(function () {
                         this.src = "http://elective.pku.edu.cn/elective2008/DrawServlet?Rand=" + Math.random();
@@ -398,11 +405,16 @@
                         eventHandler.validatePass = function () {
                             if ($this.data("active"))
                                 RefreshAllAndNotify();
+                            eventHandler.detectCaptchaSuccess = function() {}
                         };
                         eventHandler.validateNotPass = function (message) {
                             $this.data("active",false);
                             $this.removeClass("btn-danger").addClass("btn-success").text("启用自动刷新");
                             controls.sStatus.removeClass().addClass("statustext-error").text(message);
+                            eventHandler.detectCaptchaSuccess = function() {
+                                controls.tglbtnAutoRefresh.click();
+                            }
+                            controls.imgname.click();
                         };
                         validate(controls.validCode.val());
                     }
