@@ -45,7 +45,7 @@ function detectCaptcha() {
         segment_penalty_dict_nonword: 1.0,
         segment_penalty_garbage: 1.0,
         segment_reward_chartype: 1.0,
-        tessedit_pageseg_mode: 10
+        tessedit_pageseg_mode: 7
     }).then(function (result) {
         const code = result.text.replace(/[^a-z0-9A-Z]/g, '')
         $('#validCode').val(code);
