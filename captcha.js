@@ -45,14 +45,19 @@ function detectCaptcha() {
         segment_penalty_dict_nonword: 1.0,
         segment_penalty_garbage: 1.0,
         segment_reward_chartype: 1.0,
-        tessedit_pageseg_mode: 7
     }).then(function (result) {
         const code = result.text.replace(/[^a-z0-9A-Z]/g, '')
-        $('#validCode').val(code);
         if (code.length != 4) {
             eventHandler.detectCaptchaError();
         } else {
-            eventHandler.detectCaptchaSuccess();
+            eventHandler.validatePass = function () {
+                $('#validCode').val(code);
+                eventHandler.detectCaptchaSuccess();
+            }
+            eventHandler.validateNotPass = function (message) {
+                eventHandler.detectCaptchaError();
+            }
+            validate(code);
         }
     })
 }
