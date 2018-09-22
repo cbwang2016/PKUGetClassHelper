@@ -4,6 +4,15 @@
  */
 
 // 读取参数的jQuery插件
+
+if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllabus&appName=%E5%AD%A6%E7%94%9F%E9%80%89%E8%AF%BE%E7%B3%BB%E7%BB%9F&redirectUrl=http://elective.pku.edu.cn:80/elective2008/agent4Iaaa.jsp/../ssoLogin.do') {
+    setTimeout(function () {
+        $("#logon_button").click();
+    }, 3000)
+} else if (window.location.href == 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/help/HelpController.jpf') {
+    window.location.href = 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyCancel.do';
+}
+
 (function ($) {
     if ($.QueryString)
         return;
@@ -417,17 +426,11 @@
                         eventHandler.validatePass = function () {
                             if ($this.data("active"))
                                 RefreshAllAndNotify();
-                            eventHandler.detectCaptchaSuccess = function () {
-                            }
                         };
                         eventHandler.validateNotPass = function (message) {
                             $this.data("active", false);
                             $this.removeClass("btn-danger").addClass("btn-success").text("启用自动刷新");
                             controls.sStatus.removeClass().addClass("statustext-error").text(message);
-                            eventHandler.detectCaptchaSuccess = function () {
-                                controls.tglbtnAutoRefresh.click();
-                            }
-                            controls.imgname.click();
                         };
                         validate(controls.validCode.val());
                     }
