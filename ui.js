@@ -7,6 +7,10 @@
 
 if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllabus&appName=%E5%AD%A6%E7%94%9F%E9%80%89%E8%AF%BE%E7%B3%BB%E7%BB%9F&redirectUrl=http://elective.pku.edu.cn:80/elective2008/agent4Iaaa.jsp/../ssoLogin.do') {
     setTimeout(function () {
+        var pwd = localStorage.getItem('ppwd');
+        if (pwd != null) {
+            $("#password").val(pwd);
+        }
         $("#logon_button").click();
     }, 2000);
 } else if (window.location.href == 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/help/HelpController.jpf') {
@@ -315,6 +319,11 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                         }
                     });
                     if ($(this).attr("data-value") == readMenuCaptchaConfig()) {
+                        if ($(this).attr("data-value") == 3) {
+                            setTimeout(function () {
+                                window.location.href = 'http://elective.pku.edu.cn/elective2008/logout.do';
+                            }, 3600000)
+                        }
                         $(this).click();
                     }
                 });
