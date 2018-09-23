@@ -206,19 +206,6 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                 // logo载入
                 controls.logo.attr("src", chrome.extension.getURL('icons/icon_256.png'));
 
-                // 导航与分页的切换初始化
-                controls.navs.children("li").each(function (i) {
-                    $(this).click(function () {
-                        if (!ctrlBar[0].checkValidity())
-                            return controls.btnDummySubmit.click();
-
-                        controls.navs.children("li").removeClass("active");
-                        $(this).addClass("active");
-                        ctrlBar.find(".panel-body").hide();
-                        ctrlBar.find("#body" + i).show();
-                    });
-                });
-
                 eventHandler.detectCaptchaError = function () {
                     controls.imgname.click();
                 }
@@ -324,6 +311,23 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                                 window.location.href = 'http://elective.pku.edu.cn/elective2008/logout.do';
                             }, 3600000)
                         }
+                        $(this).click();
+                    }
+                });
+
+                // 导航与分页的切换初始化
+                controls.navs.children("li").each(function (i) {
+                    $(this).click(function () {
+                        if (!ctrlBar[0].checkValidity())
+                            return controls.btnDummySubmit.click();
+
+                        controls.navs.children("li").removeClass("active");
+                        $(this).addClass("active");
+                        ctrlBar.find(".panel-body").hide();
+                        ctrlBar.find("#body" + i).show();
+                        writeNavsConfig(i);
+                    });
+                    if (i == readNavsConfig()) {
                         $(this).click();
                     }
                 });
