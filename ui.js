@@ -99,9 +99,10 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
         function Final() {
 
             var worked = false; // 是否有已满课程，如果没有则不必加载插件
+            var validateDone = false;
 
             // 最后一个参数可能无
-            function ArgParse(firsthref, lasthref, index) {
+            function ArgParse(firsthref, lasthref, index, salt) {
                 var id = firsthref.attr("href").split("course_seq_no=")[1];
                 var seq_no = "";
                 if (lasthref.attr("href").indexOf("javascript") >= 0) {
@@ -110,7 +111,7 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                 else {
                     seq_no = lasthref.attr("href").split("&seq=")[1];
                 }
-                var c = new Course(id, seq_no, index);
+                var c = new Course(id, seq_no, index, salt);
                 c.name = firsthref.text();
                 return c;
             }
@@ -118,12 +119,12 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
             // 通过课程获得HTML展示代码
             function ComposeCourseInfo(course) {
                 var html = '<div class="course" id="$id"><span>$name</span><span>$max</span>/<span>$curr</span></div>'
-                    .replace(/\$id/g, "dCourseInfo" + course.id)
+                    .replace(/\$id/g, "dCourseInfo" + course.getHash())
                     .replace(/\$name/g, course.name)
                     .replace(/\$max/g, course.maxElectNum)
                     .replace(/\$curr/g, course.currElectNum);
                 return $(html).click(function () {
-                    $(".chkMonitor[data-seqno=" + course.id + "]").click();
+                    $(".chkMonitor[data-coursehash=" + course.getHash() + "]").click();
                 });
             }
 
@@ -132,23 +133,28 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                 var actionHref = $this.find("td:last-child a"), chkbox;
                 if (actionHref.length == 0)
                     return null;
-                var courseData = ArgParse($this.find("td:first a"), actionHref, index);
+                var salt = "";
+                if ($this.find("td").length >= 13)
+                    salt = $this.find("td").eq(9).text();
+                else
+                    salt = $this.find("td").eq(8).text();
+                var courseData = ArgParse($this.find("td:first a"), actionHref, index, salt);
                 var numstrs = $this.find("[id^='electedNum']").text().split(" / ");
                 courseData.currElectNum = parseInt(numstrs[1]);
                 courseData.maxElectNum = parseInt(numstrs[0]);
                 courseData.$tr = $this;
                 courseData.save();
                 if (!$this.find("td:last a").attr("id")) {
-                    chkbox = "<input class='chkMonitor' type='checkbox' data-seqno='" + courseData.id + "' />";
+                    chkbox = "<input class='chkMonitor' type='checkbox' data-coursehash='" + courseData.getHash() + "' />";
                     $this.attr("name", "available");
                 } else {
                     worked = true;
-                    chkbox = "<input class='chkMonitor' type='checkbox' data-seqno='" + courseData.id + "' />";
+                    chkbox = "<input class='chkMonitor' type='checkbox' data-coursehash='" + courseData.getHash() + "' />";
                     $this.attr("name", "unavailable");
                 }
                 $this.append($("<td class='datagrid' align='center'></td>").append(chkbox));
                 if (readCourseList().indexOf(courseData.getHash()) > -1) {
-                    $(".chkMonitor[data-seqno=" + courseData.id + "]").click();
+                    $(".chkMonitor[data-coursehash=" + courseData.getHash() + "]").click();
                 }
                 return $this;
             }
@@ -239,13 +245,13 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                     if (this.checked) {
                         $this.addClass("chk");
                         controls.dCourseList.append(
-                            ComposeCourseInfo(Course.prototype.courses.get($this.data("seqno")))
+                            ComposeCourseInfo(Course.prototype.courses.get($this.data("coursehash")))
                         );
-                        addToCourseList(Course.prototype.courses.get($this.data("seqno")).getHash());
+                        addToCourseList(Course.prototype.courses.get($this.data("coursehash")).getHash());
                     } else {
                         $this.removeClass("chk");
-                        controls.dCourseList.find("#dCourseInfo" + $this.data("seqno")).remove();
-                        deleteFromCourseList(Course.prototype.courses.get($this.data("seqno")).getHash());
+                        controls.dCourseList.find("#dCourseInfo" + $this.data("coursehash")).remove();
+                        deleteFromCourseList($this.data("coursehash"));
                     }
                     controls.sStatus.removeClass().addClass("statustext-normal")
                         .text("监视中课程：" + $(".chk").length);
@@ -291,6 +297,7 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                             case '2':
                                 document.getElementById('validCode').disabled = true;
                                 eventHandler.detectCaptchaSuccess = function () {
+                                    validateDone = true;
                                 };
                                 document.getElementById('imgname').onload = detectCaptcha;
                                 document.getElementById('canv').style.display = 'block';
@@ -298,12 +305,13 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                             case '3':
                                 document.getElementById('validCode').disabled = true;
                                 eventHandler.detectCaptchaSuccess = function () {
+                                    validateDone = true;
                                     controls.navs.children("li")[1].click();
                                     controls.tglbtnAutoRefresh.click();
                                 };
                                 document.getElementById('imgname').onload = detectCaptcha;
                                 document.getElementById('canv').style.display = 'block';
-                                controls.imgname.click();
+                                $('imgname').click();
                                 break;
                         }
                     });
@@ -386,13 +394,18 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                             var actionHref = $this.find("td:last-child a");
                             if (actionHref.length == 0)
                                 return null;
-                            var courseData = ArgParse($this.find("td:first a"), actionHref, index), lastData;
-                            lastData = Course.prototype.courses.get(courseData.id);
+                            var salt = "";
+                            if ($this.find("td").length >= 13)
+                                salt = $this.find("td").eq(9).text();
+                            else
+                                salt = $this.find("td").eq(8).text();
+                            var courseData = ArgParse($this.find("td:first a"), actionHref, index, salt), lastData;
+                            lastData = Course.prototype.courses.get(courseData.getHash());
                             if (!lastData) {
                                 $("table.datagrid:eq(0)").append(
                                     AttachCourseRow($this, index)
                                 );
-                                lastData = Course.prototype.courses.get(courseData.id);
+                                lastData = Course.prototype.courses.get(courseData.getHash());
                             } else {
                                 var numstrs = $this.find("[id^='electedNum']").text().split(" / ");
                                 lastData.currElectNum = parseInt(numstrs[1]);
@@ -471,20 +484,36 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                         $this.removeClass("btn-danger").addClass("btn-success").text("启用自动刷新");
                         controls.sStatus.removeClass().addClass("statustext-normal").text("已停止自动刷新");
                     } else {
-                        $this.data("active", true);
-                        $this.removeClass("btn-success").addClass("btn-danger").text("停止自动刷新");
-                        // 先进行验证码验证
-                        controls.sStatus.removeClass().addClass("statustext-normal").text("正在验证验证码...");
+
                         eventHandler.validatePass = function () {
+                            validateDone = true;
                             if ($this.data("active"))
                                 RefreshAllAndNotify();
                         };
                         eventHandler.validateNotPass = function (message) {
+                            validateDone = false;
                             $this.data("active", false);
                             $this.removeClass("btn-danger").addClass("btn-success").text("启用自动刷新");
                             controls.sStatus.removeClass().addClass("statustext-error").text(message);
                         };
-                        validate(controls.validCode.val());
+                        // 先进行验证码验证
+                        if (controls.btnCaptchaConfig.attr("data-value") == '1') {
+                            $this.data("active", true);
+                            $this.removeClass("btn-success").addClass("btn-danger").text("停止自动刷新");
+                            controls.sStatus.removeClass().addClass("statustext-normal").text("正在验证验证码...");
+                            if (validateDone)
+                                eventHandler.validatePass();
+                            else
+                                validate(controls.validCode.val());
+                        } else {
+                            if (validateDone) {
+                                $this.data("active", true);
+                                $this.removeClass("btn-success").addClass("btn-danger").text("停止自动刷新");
+                                eventHandler.validatePass();
+                            } else
+                                controls.sStatus.removeClass().addClass("statustext-normal").text("请等待自动验证码完成...");
+
+                        }
                     }
                 });
                 controls.sStatus.removeClass().addClass("statustext-normal").text("就绪。尚未监视课程，请勾选相应复选框");

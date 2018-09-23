@@ -4,11 +4,12 @@
  */
 
 // 需要的域：除了构造参数，还需要$tr、name、currElectNum、maxElectNum
-var Course = function(id, number, index) {
+var Course = function(id, number, index, salt) {
     this.id = id;
     this.number = number;
     this.index = index;
     this.isDone = false;
+    this.salt = salt;
 };
 
 
@@ -17,7 +18,7 @@ Course.prototype.elect = function() {
     elect(this);
 };
 Course.prototype.save = function () {
-    this.courses.put(this.id, this);
+    this.courses.put(this.getHash(), this);
 };
 Course.prototype.refreshIndex = function(i) {
     if (i > 0) {
@@ -39,7 +40,7 @@ String.prototype.hashCode = function() {
         hash = hash & hash; // Convert to 32bit integer
     }
     return hash;
-}
+};
 Course.prototype.getHash = function () {
-    return (this.id + this.index).hashCode();
+    return (this.id + this.salt).hashCode();
 };
