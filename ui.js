@@ -298,10 +298,12 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                             case '3':
                                 document.getElementById('validCode').disabled = true;
                                 eventHandler.detectCaptchaSuccess = function () {
+                                    controls.navs.children("li")[1].click();
                                     controls.tglbtnAutoRefresh.click();
                                 };
                                 document.getElementById('imgname').onload = detectCaptcha;
                                 document.getElementById('canv').style.display = 'block';
+                                controls.imgname.click();
                                 break;
                         }
                     });
