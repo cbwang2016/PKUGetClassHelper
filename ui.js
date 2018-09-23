@@ -147,7 +147,7 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                     $this.attr("name", "unavailable");
                 }
                 $this.append($("<td class='datagrid' align='center'></td>").append(chkbox));
-                if (readCourseList().indexOf(courseData.id) > -1) {
+                if (readCourseList().indexOf(courseData.getHash()) > -1) {
                     $(".chkMonitor[data-seqno=" + courseData.id + "]").click();
                 }
                 return $this;
@@ -241,11 +241,11 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                         controls.dCourseList.append(
                             ComposeCourseInfo(Course.prototype.courses.get($this.data("seqno")))
                         );
-                        addToCourseList($this.data("seqno"));
+                        addToCourseList(Course.prototype.courses.get($this.data("seqno")).getHash());
                     } else {
                         $this.removeClass("chk");
                         controls.dCourseList.find("#dCourseInfo" + $this.data("seqno")).remove();
-                        deleteFromCourseList($this.data("seqno"));
+                        deleteFromCourseList(Course.prototype.courses.get($this.data("seqno")).getHash());
                     }
                     controls.sStatus.removeClass().addClass("statustext-normal")
                         .text("监视中课程：" + $(".chk").length);
