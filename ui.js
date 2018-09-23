@@ -484,7 +484,6 @@ if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllab
                         $this.removeClass("btn-danger").addClass("btn-success").text("启用自动刷新");
                         controls.sStatus.removeClass().addClass("statustext-normal").text("已停止自动刷新");
                     } else {
-
                         eventHandler.validatePass = function () {
                             validateDone = true;
                             if ($this.data("active"))
