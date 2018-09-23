@@ -8,8 +8,8 @@
 		"include_globs": [  ],
 		"js": ["libs/tesseract/tesseract.js", "libs/morph.js", "libs/jquery.js", "libs/notify.js", "bootstrap.min.js", "map.js", "course.js",  "eventHandler.js", "elect.js", "validate.js" ,"server.js", "limit.js", "captcha.js", "ui.js", "localStorageManager.js" ],
 		"css": [ "bootstrap.min.css", "style.css" ],
-		"matches": [ "http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyAndCancel.do*","http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyCancel.do*" ,"http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/electSupplement.do*",
-		"http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/supplement.jsp*","http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/cancelCourse.do*"],
+		"matches": [ "http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyCancel.do*" ,"https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllabus&appName=%E5%AD%A6%E7%94%9F%E9%80%89%E8%AF%BE%E7%B3%BB%E7%BB%9F&redirectUrl=http://elective.pku.edu.cn:80/elective2008/agent4Iaaa.jsp/../ssoLogin.do",
+		"http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/help/HelpController.jpf*"],
 		"run_at": "document_idle"
 	} ,
 	{

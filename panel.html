@@ -49,7 +49,7 @@
                 <div class="form-inline pull-left" onsubmit="return false">
                     <div class="form-group">
                         <label>时间间隔（秒）</label>
-                        <input class="form-control" id="txtInterval" type="number" value="15" min="10" max="60" autofocus required />
+                        <input class="form-control" id="txtInterval" type="number" value="1" min="1" max="60" autofocus required />
                     </div>
                 </div>
                 <div class="form-inline pull-left" onsubmit="return false" style="margin-left: 10px;">
@@ -95,7 +95,7 @@
             <div id="dCourseList"></div>
             <b>状态：</b><span id="sStatus" class="statustext-normal" >就绪，等待执行</span>
             <button type="button" class="btn btn-success pull-right" id="tglbtnAutoRefresh" style="position:relative; top: -8px;">启用自动刷新</button>
-            <span id="limitTimesLabel" class="pull-right" style="margin-right:20px;">今日限额已使用 0 / 6000 次</span>
+            <span id="limitTimesLabel" class="pull-right" style="margin-right:20px;">今日限额已使用 0 / 999999 次</span>
         </div>
     </div>
     <button class="hidden" type="submit" id="btnDummySubmit"></button>
