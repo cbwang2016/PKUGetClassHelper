@@ -532,7 +532,7 @@
                 } else if (window.location.href == 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/help/HelpController.jpf') {
                     controls.btnHide.click();
                     if (readMenuCaptchaConfig() == 3)
-                        window.location.href = 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyCancel.do';
+                        window.location.href = 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyOnly.do';
                 }
 
                 container.slideDown();
