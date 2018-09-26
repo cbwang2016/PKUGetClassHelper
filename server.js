@@ -57,6 +57,7 @@ function checkUpdate(show) {
  * @param clickFunc {function|null} 鼠标点击触发函数
  */
 function desktopNotify(icon, title, body, clickFunc) {
+    console.log(body);
     try{
         var n = new Notification(title, {
             'icon':'http://elective.pku.edu.cn/elective2008/resources/images/'+icon+'.gif',  // icon url - can be relative
