@@ -369,7 +369,7 @@
                     var watingForElect = [];
                     LoadCourses(currID, false, function (courserows) {
                         if (!courserows) {
-                            countTime = parseInt(controls.txtInterval.val()) * 1000;
+                            countTime = parseInt(controls.txtInterval.val()) * 500;
                             timInterval = setInterval(countDown, 300, '上次刷新失败');
                             return;
                         }
@@ -415,7 +415,7 @@
                                 hasElected = true;
                             }
                         });
-                        countTime = parseInt(controls.txtInterval.val()) * 1000;
+                        countTime = parseInt(controls.txtInterval.val()) * 500;
                         if (!hasElected) {
                             controls.sStatus.removeClass().addClass("statustext-normal")
                                 .text("刷新结束，无变化，" + countTime / 1000 + ".0秒后再试");
