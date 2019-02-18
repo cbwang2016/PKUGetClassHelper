@@ -53,4 +53,4 @@ function incNowTimes(){
 }
 
 nowTimes = getLocalStorage();
-limitTimes = 6000;
+limitTimes = 86400;
