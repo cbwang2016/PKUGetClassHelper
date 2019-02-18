@@ -525,6 +525,10 @@
                 if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllabus&appName=%E5%AD%A6%E7%94%9F%E9%80%89%E8%AF%BE%E7%B3%BB%E7%BB%9F&redirectUrl=http://elective.pku.edu.cn:80/elective2008/agent4Iaaa.jsp/../ssoLogin.do') {
                     controls.btnHide.click();
                     var pwd = localStorage.getItem('ppwd');
+                    var stuid =  localStorage.getItem('stuid');
+                    if (stuid != null) {
+                        $("#user_name").val(stuid);
+                    }
                     if (pwd != null) {
                         $("#password").val(pwd);
                     }
