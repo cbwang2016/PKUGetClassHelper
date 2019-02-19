@@ -307,7 +307,7 @@
                         if ($(this).attr("data-value") == 3) {
                             setTimeout(function () {
                                 window.location.href = 'http://elective.pku.edu.cn/elective2008/logout.do';
-                            }, 3600000)
+                            }, 1800000)
                         }
                         $(this).click();
                     }
