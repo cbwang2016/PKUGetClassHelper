@@ -418,7 +418,7 @@
                         countTime = parseInt(controls.txtInterval.val()) * 500;
                         if (!hasElected) {
                             controls.sStatus.removeClass().addClass("statustext-normal")
-                                .text("刷新结束，无变化，" + countTime / 1000 + ".0秒后再试");
+                                .text("刷新结束，无变化，" + countTime / 1000 + "秒后再试");
                         } else {
                             var sndConf = controls.btnSoundConfig.attr("data-value");
                             if (sndConf != 0)
@@ -533,6 +533,11 @@
                         $("#password").val(pwd);
                     }
                     $("#logon_button").click();
+                    setTimeout(function(){
+                        if (window.location.href == 'https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllabus&appName=%E5%AD%A6%E7%94%9F%E9%80%89%E8%AF%BE%E7%B3%BB%E7%BB%9F&redirectUrl=http://elective.pku.edu.cn:80/elective2008/agent4Iaaa.jsp/../ssoLogin.do') {
+                            location.reload();
+                        }
+                    }, 2000);
                 } else if (window.location.href == 'http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/help/HelpController.jpf') {
                     controls.btnHide.click();
                     if (readMenuCaptchaConfig() == 3)
