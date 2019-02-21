@@ -1,6 +1,7 @@
 /*
  * 内部频率限制
  * @author Zakelly
+ * @modified by thrfirs
  */
 
 nowTimes = 0;
@@ -53,4 +54,3 @@ function incNowTimes(){
 }
 
 nowTimes = getLocalStorage();
-limitTimes = 86400;

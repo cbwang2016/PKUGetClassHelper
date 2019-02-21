@@ -1,6 +1,7 @@
 /*
  * 附加到选课页面的交互逻辑
  * @author zhouhy
+ * @modified by thrfirs
  */
 
 // 读取参数的jQuery插件
@@ -178,9 +179,10 @@
                 $('body').css({marginBottom: "180px"});
 
                 var timInterval, countTime;
+				const refreshTimeUnit = 100, deltaTickTime = 50;
 
                 var controls = {
-                    txtInterval: null, validCode: null, imgname: null,
+                    txtInterval: null, txtLatency: null, validCode: null, imgname: null,
                     radFilterAll: null, radFilterAvailable: null,
                     radFilterUnAvailable: null, tglbtnAutoRefresh: null,
                     sStatus: null, btnCheckUpdate: null, navs: null, logo: null,
@@ -255,6 +257,11 @@
                 $('#txtInterval').val(readTxtInterval());
                 document.getElementById('txtInterval').onchange = function () {
                     writeTxtInterval($('#txtInterval').val());
+                };
+				
+                $('#txtLatency').val(readTxtLatency());
+                document.getElementById('txtLatency').onchange = function () {
+                    writeTxtLatency($('#txtLatency').val());
                 };
 
                 // 选择操作按钮们
@@ -341,30 +348,24 @@
                 //更新
                 checkUpdate(false);
 
-                //限额
-                controls.limitTimesLabel.text("今日限额已使用 " + nowTimes + " / " + limitTimes + " 次");
+                // 刷新计数
+                controls.limitTimesLabel.text("今日已刷新 " + nowTimes + " 次");
 
                 function RefreshAllAndNotify() {
                     // 刷新和比对逻辑
-
-                    if (nowTimes < limitTimes) {
-                        incNowTimes();
-                    }
-                    else {
-                        controls.tglbtnAutoRefresh.click();
-                        controls.sStatus.removeClass().addClass("statustext-normal").text("已停止自动刷新，达到当日限额。");
-                        return;
-                    }
-                    //限额
-                    controls.limitTimesLabel.text("今日限额已使用 " + nowTimes + " / " + limitTimes + " 次");
+					
+					// 刷新计数
+					incNowTimes();
+					controls.limitTimesLabel.text("今日已刷新 " + nowTimes + " 次");
 
 
                     controls.sStatus.removeClass().addClass("statustext-normal").text("刷新中……");
                     var watingForElect = [];
                     LoadCourses(currID, false, function (courserows) {
                         if (!courserows) {
-                            countTime = parseInt(controls.txtInterval.val()) * 1000;
-                            timInterval = setInterval(countDown, 300, '上次刷新失败');
+							countTime = parseInt(controls.txtInterval.val()) * refreshTimeUnit;
+							countTime += Math.floor(Math.random() * parseInt(controls.txtLatency.val()) * refreshTimeUnit);
+                            timInterval = setInterval(countDown, deltaTickTime, '上次刷新失败');
                             return;
                         }
                         var hasElected = false;
@@ -409,10 +410,11 @@
                                 hasElected = true;
                             }
                         });
-                        countTime = parseInt(controls.txtInterval.val()) * 1000;
+						countTime = parseInt(controls.txtInterval.val()) * refreshTimeUnit;
+						countTime += Math.floor(Math.random() * parseInt(controls.txtLatency.val()) * refreshTimeUnit);
                         if (!hasElected) {
                             controls.sStatus.removeClass().addClass("statustext-normal")
-                                .text("刷新结束，无变化，" + countTime / 1000 + ".0秒后再试");
+                                .text("刷新结束，无变化，" + Math.floor(countTime / 1000) + '.' + Math.floor(countTime / 10) % 100 + "秒后再试");
                         } else {
                             var sndConf = controls.btnSoundConfig.attr("data-value");
                             if (sndConf != 0)
@@ -433,7 +435,7 @@
                                 course = watingForElect.pop();
                             }
                         }
-                        timInterval = setInterval(countDown, 300, '刷新结束');
+                        timInterval = setInterval(countDown, deltaTickTime, '刷新结束');
                     });
                 }
 
@@ -441,13 +443,13 @@
                 function countDown(text) {
                     if (!controls.tglbtnAutoRefresh.data("active"))
                         return;
-                    if (countTime <= 300) {
+                    if (countTime <= deltaTickTime) {
                         clearInterval(timInterval);
                         RefreshAllAndNotify();
                     }
                     else {
-                        countTime -= 300;
-                        controls.sStatus.text(text + "，" + Math.floor(countTime / 1000) + '.' + Math.floor(countTime / 100) % 10 + "秒后再试");
+                        countTime -= deltaTickTime;
+                        controls.sStatus.text(text + "，" + Math.floor(countTime / 1000) + '.' + Math.floor(countTime / 10) % 100 + "秒后再试");
                     }
                 }
 
