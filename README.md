@@ -1,4 +1,4 @@
-# PKU选课助手 无限制版 by thrfirs
+# PKU选课助手 无限制版 by cbwang2016, thrfirs, Zakelly, zhouhy
 
 对原版PKU刷课机做了如下修改：
 
