@@ -27,7 +27,16 @@ function writeTxtInterval(txtInterval) {
 
 function readTxtInterval() {
     var rtn = JSON.parse(localStorage.getItem('txtInterval'));
-    return rtn == null ? 15 : rtn;
+    return rtn == null ? 150 : rtn;
+}
+
+function writeTxtLatency(txtLatency) {
+	localStorage.setItem('txtLatency', txtLatency);
+}
+
+function readTxtLatency() {
+    var rtn = JSON.parse(localStorage.getItem('txtLatency'));
+    return rtn == null ? 50 : rtn;
 }
 
 function readMenuCaptchaConfig() {
