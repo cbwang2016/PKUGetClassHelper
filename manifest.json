@@ -10,6 +10,7 @@
 		"css": [ "bootstrap.min.css", "style.css" ],
 		"matches": [ "http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyAndCancel.do*","http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyCancel.do*" ,"http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/electSupplement.do*",
 		"http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/supplement.jsp*","http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/cancelCourse.do*" ,"https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllabus&appName=%E5%AD%A6%E7%94%9F%E9%80%89%E8%AF%BE%E7%B3%BB%E7%BB%9F&redirectUrl=http://elective.pku.edu.cn:80/elective2008/agent4Iaaa.jsp/../ssoLogin.do",
+		"https://iaaa.pku.edu.cn/iaaa/oauth.jsp?appID=syllabus&appName=%E5%AD%A6%E7%94%9F%E9%80%89%E8%AF%BE%E7%B3%BB%E7%BB%9F&redirectUrl=http://elective.pku.edu.cn:80/elective2008/ssoLogin.do",
 		"http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/help/HelpController.jpf*", "http://elective.pku.edu.cn/elective2008/edu/pku/stu/elective/controller/supplement/SupplyOnly.do*"],
 		"run_at": "document_idle"
 	} ,
